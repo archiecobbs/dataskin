@@ -1,0 +1,15 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="~.*"/>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2,CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
+        <Class name="~org\.dellroad\.dataskin\.viewer\.basic\..*MethodScanner.*"/>
+        <Bug pattern="EQ_DOESNT_OVERRIDE_EQUALS"/>
+    </Match>
+    <Match>
+        <Class name="org.dellroad.dataskin.viewer.basic.BasicDisplayHooks$FieldBuilderContext"/>
+        <Field name="displayHooks"/>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
+</FindBugsFilter>
