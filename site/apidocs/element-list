@@ -1,0 +1,7 @@
+org.dellroad.dataskin.ops
+org.dellroad.dataskin.ops.annotation
+org.dellroad.dataskin.ops.scanner
+org.dellroad.dataskin.viewer
+org.dellroad.dataskin.viewer.basic
+org.dellroad.dataskin.viewer.display
+org.dellroad.dataskin.viewer.navtree
