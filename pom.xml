@@ -13,8 +13,13 @@
     <artifactId>dataskin</artifactId>
     <name>DataSkin</name>
     <version>1.0.0</version>
+    <packaging>pom</packaging>
     <description>Data model viewing and interaction library based on Vaadin.</description>
     <url>https://github.com/archiecobbs/dataskin</url>
+    <modules>
+        <module>dataskin-ops</module>
+        <module>dataskin-viewer</module>
+    </modules>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -44,32 +49,31 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
 
-        <automatic.module.name>org.dellroad.dataskin</automatic.module.name>
-        <vaadin.version>24.4.6</vaadin.version>
+        <!-- Dependency versions -->
+        <testng.version>7.7.0</testng.version>
     </properties>
+
     <dependencies>
+
+        <!-- FindBugs annotations - not needed at runtime -->
         <dependency>
-            <groupId>org.dellroad</groupId>
-            <artifactId>dellroad-stuff-main</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.dellroad</groupId>
-            <artifactId>dellroad-stuff-vaadin24</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-core</artifactId>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Standard test dependencies -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
 
-            <!-- Set versions for the usual dependencies from parent -->
+            <!-- Set versions for the usual dependencies -->
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
                 <artifactId>${project.parent.artifactId}</artifactId>
@@ -78,13 +82,19 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Vaadin -->
+            <!-- Siblings -->
             <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-bom</artifactId>
-                <version>${vaadin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>org.dellroad</groupId>
+                <artifactId>dataskin-ops</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Testing & Debug -->
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -245,12 +255,6 @@
                         <link>https://guava.dev/releases/${guava.version}/api/docs/</link>
                         <link>https://www.slf4j.org/apidocs/</link>
                     </links>
-                    <offlineLinks>
-                        <offlineLink>
-                            <url>https://vaadin.com/api/platform/${vaadin.version}</url>
-                            <location>${project.basedir}/src/javadoc/vaadin</location>
-                        </offlineLink>
-                    </offlineLinks>
                 </configuration>
                 <executions>
                     <execution>
@@ -322,6 +326,42 @@
             </extension>
         </extensions>
     </build>
+    <reporting>
+        <plugins>
+
+            <!-- Aggregated Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <notimestamp>true</notimestamp>
+                    <validateLinks>true</validateLinks>
+                    <aggregate>true</aggregate>
+                    <doclint>-missing</doclint>
+                    <links>
+                        <link>https://archiecobbs.github.io/dellroad-stuff/site/apidocs/</link>
+                        <link>https://www.slf4j.org/apidocs/</link>
+                    </links>
+                    <offlineLinks>
+                        <offlineLink>
+                            <url>https://vaadin.com/api/platform/${vaadin.version}</url>
+                            <location>${project.basedir}/src/javadoc/vaadin</location>
+                        </offlineLink>
+                    </offlineLinks>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
     <profiles>
 
         <!-- Maven Central requires signed artifacts -->
